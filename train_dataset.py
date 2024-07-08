@@ -1,11 +1,12 @@
- # Importing all the libraries required for training
- #  Paste the kaggle database link here ******************************************************************************** 
+ # Importing Dataset
 
-import tensorflow as tef
+ # Dataset kaggle link :- https://www.kaggle.com/datasets/vipoooool/new-plant-diseases-dataset
+
+# Importing all the libraries required for training
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-
 import tensorflow as tf
 
 # Defining parameters
@@ -15,7 +16,7 @@ img_width = 128
 
 # Created the training dataset from the directory
 training_set = tf.keras.utils.image_dataset_from_directory(
-    'train',
+    'train', #using the train folder for processing
     labels="inferred",
     label_mode="categorical",
     class_names=None,
@@ -125,6 +126,28 @@ history = cnn.fit(
 # Evaluate the model
 results = cnn.evaluate(validation_set)
 print(f"Validation Loss: {results[0]}, Validation Accuracy: {results[1]}")
+
+#Training set Accuracy
+train_loss,train_acc = cnn.evaluate(training_set)
+print('Training Accuracy:',train_acc)
+
+#Validating Accuracy 
+val_loss, val_acc = cnn.evaluate(validation_set)
+print('Validation accuracy:', val_acc)
+
+
+#Saving The Model
+cnn.save('trained_plant_disease_model.keras')
+
+
+#Using Graphs to Test The Accuracy Result 
+epochs = [i for i in range(1,11)]  #( 10 times ) number of Epochs
+plt.plot(epochs,training_history.history['accuracy'],color='green',label='Training Accuracy')
+plt.plot(epochs,training_history.history['val_accuracy'],color='yellow',label='Validation Accuracy')
+plt.xlabel('No. of Epochs')
+plt.title('Visualization of Accuracy Result')
+plt.legend()
+plt.show()
 
 
 
